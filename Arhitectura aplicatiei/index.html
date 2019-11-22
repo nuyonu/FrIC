@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Scholarly HTML FrIC</title>
+  <link rel="stylesheet" href="css/scholarly.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <script src="js/scholarly.min.js"></script>
+</head>
+
+<body prefix="schema: http://schema.org">
+  <header>
+    <div class="banner">
+      <img src="scholarly-html.svg" width="227" height="50" alt="Scholarly HTML logo">
+      <div class="status">FrIC</div>
+    </div>
+    <h1>Scholarly HTML FrIC</h1>
+  </header>
+  <div role="contentinfo">
+    <dl>
+      <dt>Autori</dt>
+      <dd>
+        Grigoraș Alexandru Ionel
+        &amp;
+        Paul Maxim
+        &amp;
+        Filoș Gabriel
+      </dd>
+      <dt>Github</dt>
+      <dd>
+        <a role="doc-biblioref" href="https://github.com/nuyonu/FrIC">Link Github</a>
+      </dd>
+    </dl>
+  </div>
+  <section id="introduction" role="doc-introduction">
+    <h2>Indroducere</h2>
+    <p>
+      Se doreşte dezvoltarea unui cadru-suport (framework, platformă) pentru a vizualiza eficient diverse tipuri de
+      fractali -- minimal, sisteme generative precum fractalii Lindenmayer (L-systems) implicând un număr foarte mare de
+      reguli şi/sau iteraţii. Modalitatea de redare (2D şi 3D) va recurge la utilizarea uneia sau mai multor soluţii
+      aliniate problematicilor cloud computing -- a se explora resursele oferite de Awesome Cloud Native.
+    </p>
+  </section>
+  <section id="structure">
+    <h2>Arhitectura software de ansamblu</h2>
+    <section id="diagram">
+      <h3>Diagarama aplicației</h3>
+      <figure>
+        <img typeof="sa:image" src="resources/diagrama1.png" alt="Trulli" style="width:100%">
+        <figcaption>Fig.1 - Arhitectura aplicației</figcaption>
+      </figure>
+    </section>
+    <section id="main-module">
+      <h3>Module principale</h3>
+      <section id="client-module">
+        <h4>Module client</h4>
+        <p>
+          Clientul va avea doar un modul ce va putea fi instanțiat cu un token, el va putea configura parametrii de
+          calculare al fractalului în funcție de axioma de început, regulile de calcul, adâncimea(numărul de iterații),
+          preferințe(culoare, background, dimensiunea imaginii, etc).
+        </p>
+        <p>
+          Clientul poate opta pentru a primi o poza direct din server cu fractalul său desenat sau poate opta pentru a
+          primi doar regula finală calculată sub forma unui string.
+        </p>
+      </section>
+      <section id="server-module">
+        <h4>Module server</h4>
+        <p>
+          În primul rând vom avea un modul pentru autentificarea/înregistrarea userilor. Acest modul va genera un token
+          unic pentru fiecare client ce dorește să folosească framework-ul nostru.
+        </p>
+        <p>
+          Vom avea un modul care va lucra cu baza de date. În baza de date vom avea anumite informații precum username,
+          HASH(password), token, data de înregistrarea, tipul de licență, data când se termină licența. Eventual vom
+          oferi o statistică despre request-urile rămase, în cât timp a fost calculată o regula trimisă către server
+          (ultimele 50 de reguli sau ultima regulă).
+        </p>
+        <p>
+          Un alt modul important va fi cel care se va ocupa de request-urile primite de la client. Acest modul va primi
+          request-uri de la clienții care folosesc framework-ul și va trimite mai departe cereri către un API-Gateway de
+          la Amazon.
+        </p>
+      </section>
+      <section id="lambda-functions">
+        <h4>Funcții lambda</h4>
+        <p>
+          O funcție lambda importantă este cea pentru calculul fractalului, această funcție va primi ca parametrii
+          (axioma, regulile de calcul, unghiul, adâncimea(numărul de iterații). Această funcție va returna un string cu
+          regula finală ce va putea fi parsată unei alte funcții lambda ce va returna o imagine cu fractalul desenat.
+        </p>
+        <p>
+          O altă funcție lambda este cea pentru desenarea fractalului ce primește ca input un string și returnează o
+          imagine cu fractalul desenat.
+        </p>
+      </section>
+    </section>
+  </section>
+  <section id="etape-principale">
+    <h2>Etapele principale ale proiectului</h2>
+    <p>
+      O primă etapă o reprezintă proietarea arhitecturii. Aici am stabilit la ce va avea clientul acces, ce va putea
+      face serverul și de ce funcții lambda vom avea nevoie pentru partea de cloud.
+    </p>
+    <p>
+      O a doua etapă va reprezinta implementarea api-gateway-ului și a funcțiilor lambda ce le vom apela din serverul
+      nostru. Momentan ne-am rezumat la două funcții, una pentru calculul fractalului și una pentru generarea imaginii
+      cu rezultatul din prima funcție.<br>
+      API-ul va avea acces la o bază de date unde va putea verifica dacă în baza de date există deja salvată o procesare
+      a fractalului care l-a primit, în cazul în care există va lua rezultatul din baza de date și îl va trimite către
+      funcția de generare a imaginii. În cazul în care nu există un rezultat, va apela la funcția de calcul, după care
+      va apela funcția de generare a imaginii.
+    </p>
+    <p>
+      O a treia etapă va reprezenta implementarea serverului ce va avea mai multe roluri. Un prim rol va fi acela de a
+      oferi suport pentru înregistre și autentificare pe site-ul framework-ului. Clientul trebuie să se înregistreze
+      pentru a putea folosi framework-ul deoarece noi identificăm un utilizator printr-un token unic. Tokenul va putea
+      fi generat după ce clientul își creează contul. Un alt rol va fi acela de a verifica dacă atunci când un client
+      apelează funcții din framework el are acces. Dacă clientul are acces, atunci va primi un rezultat la cererea sa,
+      în caz contrar va primi ca răspuns un link către site-ul de înregistrare.
+    </p>
+    <p>
+      Ultima etapă va fi implementarea clientului. Vom avea un modul prin care îi vom oferi posibilitatea de a accesa
+      serviciile noastre. Prin intermediul unui token el va putea face cereri către server și dacă token-ul este valid
+      va primi rezultatul, în caz contrar va primi un link către site și i se va afișa sub forma unei erori.
+    </p>
+  </section>
+  <section id="maniera-de-interactiune">
+    <h2>Maniera de interacţiune cu utilizatorul</h2>
+    <p>
+      Pentru ca un utilizator să poată folosi funcțiile disponibile pe partea de client, el va trebuii să se
+      înregistreze pe site-ul oferit de către noi și să își genereze un token. Tokenul îl va putea folosi la
+      inițializarea modului. Acesta va putea configura informațiile trimise către server și va primi un răspuns
+      corespunzător. În cazul în care clientul nu are un token valid din baza de date va primi un link către site-ul de
+      înregistrare, iar funcția apelată va arunca o eroare. Dacă totul este în regula pe partea de acces, atunci
+      serverul va procesa cererea sa.<br>
+
+      Procesarea cererii va însemna apelul către API-Gateway-ul de la Amazon. Serverul va trimite un JSON cu cele
+      necesare pentru ca API-ul să poate apela funcțiile și să returneze un rezultat. API-Gateway-ul va avea acces și la
+      o bază de date de unde va putea extrage mult mai repede date dacă cererea a fost făcute de către alt client cu
+      aceleași caracteristici.<br>
+
+      În final după ce se termină de procesat cererea către Amazon, rezultatul este trimis de către server spre client.
+      Clientul poate opta la configurarea cererii dacă dorește o poză cu anumite caracteristici (culoare linii, culoare
+      background, dimensiunea imaginii, etc) sau dorește doar regula finală după N iterații.<br>
+
+      Clientul va avea de ales între 3 planuri:
+      <ul>
+        <li>Gratuit - Utilizatorul are voie doar la câteva cereri și este limitat inclusiv la numărul de iterații(maxim
+          10)</li>
+        <li>Intermediar - Utilizatorul are voie să facă câte cereri dorește contra cost, dar este limitat din punct de
+          vedere al numărului de iterații(maxim 50)</li>
+        <li>Ultimate - Utilizatorul poate face câte cereri dorește contra cost și are voie să specifice orice număr de
+          iterații. În funcție de numărul de iterații, timpul va crește</li>
+      </ul>
+    </p>
+  </section>
+  <section id="management-code">
+    <h2>Modul de folosire a sistemului de management al codului-sursă</h2>
+    <section id="github1">
+      <h3>Cum folosim github?</h3>
+      <p>GitHub este un serviciu de hosting al proiectelor git (un proiect git este numit repository). Acesta permite
+        păstrarea unei copii a proiectului online și vizualizarea tuturor fișierelor și a modificărilor aduse
+        acestora.<br>
+
+        Utilizăm GitHub pentru a stoca codul în diverse versiuni, versiuni care sunt cât mai stabile. Vom avea versiuni
+        de la codul HTML/CSS/JAVASCRIPT până la versiuni ce conțin inclusiv funcționalitate pentru server,
+        funcționalitate
+        ce va fi realizată cu ajutorul limbajului de programare TYPESCRIPT. O versiune pentru noi va reprezenta un
+        stagiu in care se afla proiectul.</p>
+    </section>
+    <section id="github2">
+      <h3>Cât de folositor este github?</h3>
+      <p>
+        Pe o scară de la unu la zece, GitHub ar primi nota zece. Este foarte folositor în proiectul nostru deoarece
+        acesta oferă multe avantaje precum:
+        <ul>
+          <li>este salvat istoricul tuturor modificărilor, astfel că se poate reveni oricând la o versiune mai veche
+            dacă se descoperă introducerea unor defecte în ultima versiune</li>
+          <li>prin folosirea unui serviciu de hosting, codul sursă are mereu o copie de siguranță online</li>
+          <li>cea mai recentă versiune a codului sursă este mereu disponibilă tuturor dezvoltatorilor, făcând astfel
+            colaborarea și sincronizarea mult mai ușoară decât în cazul trimiterii de fișiere conținând cod sursă
+            dezvoltatorilor interesați de proiect.</li>
+        </ul>
+      </p>
+    </section>
+    <p>
+      Momentan nu avem stări intermediare ale proiectului, deoarece până acum am lucrat la arhitectura proiectului.
+      Urmează să facem partea de cloud computing, ca pe urmă să putem face serverul și partea de client. Vom avea stări
+      intermediare pentru fiecare fiecare etapă în parte.
+    </p>
+  </section>
+  <section id="modelarea-datelor">
+    <h2>Modelarea datelor / Soluţiile de stocare</h2>
+    <p>
+      Pentru a stoca datele pe partea de server vom folosi o bază de date relațională (PostgresSQL), iar pentru a lucra
+      cu baza de date vom folosi un ORM (Object Relational Mapping), încă nu știm exact care, dar pentru început vom
+      încerca cu "squelize".<br>
+
+      Serverul va avea o bază de date minimalistă în care vom ține datele legate de utilizator (username,
+      HASH(password), token-ul generat, data_de_înregistrare, licența(gratuit, intermediar, ultimate), ultimele cereri
+      către server, timpul necesar pentru ultima cerere către server). Aceste date le vom folosi pentru a genera o
+      statistică clientului, statistică ce va putea fi văzută de pe pagina FrameWork-ului.
+    </p>
+    <p>
+      Pe partea de cloud vom folosi "Amazon Aurora (PostgresSQL)", eventual pentru a lucra cu baza de date vom folosi
+      același ORM sau vom merge pe ideea de basic SQL pentru a putea face acțiuni asupra bazei.
+    </p>
+    <section>
+      <h3>Diagrama baza de date server</h3>
+      <figure>
+          <img typeof="sa:image" src="resources/Diagrama baza de date.png" alt="Diagrama baza de date" style="width:100%">
+          <figcaption>Fig.2 - Diagrama bază de date server.</figcaption>
+      </figure>
+    </section>
+    <section>
+      <h3>Diagrama baza de date Amazon</h3>
+      <figure>
+        <img typeof="sa:image" src="resources/Diagrama baza de date amazon.png" alt="Diagrama baza de date" style="width:35%;">
+        <figcaption>Fig.3 - Diagrama bază de date amazon.</figcaption>
+    </figure>
+    </section>
+  </section>
+</body>
+
+</html>
