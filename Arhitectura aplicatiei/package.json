@@ -9,6 +9,7 @@
     "watch-css": "postcss --watch --config ./cssnow.json css/scholarly.css",
     "build": "npm run build-css && npm run build-js",
     "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""
+	"start": "npm run watch"
   },
   "devDependencies": {
     "concurrently": "2.0.0",
