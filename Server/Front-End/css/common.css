@@ -1,0 +1,70 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #00c6ff; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #0072ff,
+      #00c6ff
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #0072ff,
+      #00c6ff
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+h1, h2, h3, h4, h5 {
+    margin: 0px;
+}
+
+.main {
+    padding: 0 5%;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.col-flex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.btn {
+    color: white;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn--primary {
+    background: #0d8fc2;
+    border-color: #0d8fc2;
+}
+
+.btn--success {
+    background: #00e600;
+    border-color:#00e600;
+}
+
+.btn--danger {
+    background: #e62e00;
+    border-color: #e62e00;
+}

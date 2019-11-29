@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>First Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Login and register page.">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/first-page.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <script src="js/first-page.js" async defer></script>
+</head>
+
+<body>
+    <div class="main full-height">
+        <div class="col-flex align-center full-height">
+            <div id="login">
+                <button class="btn" id="login__btn-login" onclick="first_page.showModal('.modal-login')">Login</button>
+            </div>
+            <div id="register">
+                <button class="btn" id="register__btn-register"
+                    onclick="first_page.showModal('.modal-register')">Register</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <!-- footer empty -->
+    </footer>
+    <!-- login modal -->
+    <div class="align-center modal modal-login">
+        <div class="modal__container col-flex">
+            <div class="modal__container__close-button">
+                <button class="btn modal__close-button" aria-hidden="true"
+                    onclick="first_page.closeModal('.modal-login')">&#x2715;</button>
+            </div>
+            <form class="col-flex align-center">
+                <label for="username">Username:</label>
+                <input id="username" type="text" placeholder="Enter username" autofocus required>
+                <label for="paswword">Password:</label>
+                <input id="paswword" type="password" placeholder="Enter password" required>
+                <button class="btn btn--primary btn--submit" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <!-- register modal -->
+    <div class="align-center modal modal-register">
+        <div class="modal__container col-flex">
+            <div class="modal__container__close-button">
+                <button class="btn modal__close-button" aria-hidden="true"
+                    onclick="first_page.closeModal('.modal-register')">&#x2715;</button>
+            </div>
+            <form class="col-flex align-center">
+                <label for="username-register">Username:</label>
+                <input id="username-register" type="text" placeholder="Enter username" autofocus required>
+                <label for="password-register">Password:</label>
+                <input id="password-register" type="password" placeholder="Enter password" required>
+                <label for="repeat-password">Repeat password:</label>
+                <input id="repeat-password" type="password" placeholder="Enter password again" required>
+                <label for="email">Email:</label>
+                <input id="email" type="email" placeholder="Enter email" required>
+                <button class="btn btn--primary btn--submit" type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
