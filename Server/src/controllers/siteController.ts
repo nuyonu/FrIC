@@ -9,11 +9,22 @@ const serveStatic = require('serve-static-restify');
 
 export class SiteController implements Controller {
     initialize(httpServer: HttpServer): void {
+        httpServer.get("/favicon.ico", this.favIcon.bind(this));
         httpServer.get("/", this.index.bind(this));
         httpServer.get("/home", this.home.bind(this));
         httpServer.get('/public/*', restify.plugins.serveStatic({
             directory : config.SRC
         }));
+    }
+
+    private async favIcon(req: Request, res: Response): Promise<void> {
+        const data = fs.readFileSync(config.FAVICON);
+        res.writeHead(200, {
+                        'Content-Length': Buffer.byteLength(data),
+                        'Content-Type': 'image/png'
+                        });
+        res.write(data);
+        res.end();
     }
 
     private async index(req: Request, res: Response): Promise<void> {

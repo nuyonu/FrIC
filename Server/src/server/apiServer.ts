@@ -26,6 +26,9 @@ export class ApiSever implements HttpServer {
         // this.restify.use(rjwt({secret: config.JWT.SECRET}).unless({
         //     path: ['/api/auth', '/api/users', "/", "/home", '/public/*']
         // }));
+        // this.restify.use(rjwt({secret: config.JWT.SECRET}).unless({
+        //     path: ['/api/auth', '/api/users', "/", "/home", '/public/*']
+        // }));
         
         CONTROLLERS.forEach(controller => controller.initialize(this));
 

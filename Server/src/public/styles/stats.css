@@ -1,4 +1,4 @@
-.title {
+#title {
     padding: 15px 0 0 5%;
     font-size: 50px;
     text-decoration: underline;
@@ -16,6 +16,7 @@
   font-size: 18px;
   resize: none;
   color: white;
+  cursor: copy;
 }
 
 @media only screen and (max-width: 10000px) {

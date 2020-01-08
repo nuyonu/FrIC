@@ -3,6 +3,9 @@ import { HttpServer } from './../server/httpServer';
 import { Controller } from './controller';
 import { Request, Response} from "restify";
 import { config } from "../config/config";
+import { validate } from 'class-validator';
+import { User } from '../models/user';
+import * as rjwt from 'restify-jwt-community';
 
 export class UsersController implements Controller {
     initialize(httpServer: HttpServer): void {
