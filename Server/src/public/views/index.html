@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>First Page</title>
+    <title>Fric</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Description" content="Login and register page.">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/first-page.css">
+    <link rel="stylesheet" href="/public/styles/common.css">
+    <link rel="stylesheet" href="/public/styles/index.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
-    <script src="js/first-page.js" async defer></script>
+    <script src="/public/js/index.js" async defer></script>
 </head>
 
 <body>
@@ -38,9 +38,9 @@
             <form class="col-flex align-center">
                 <label for="username">Username:</label>
                 <input id="username" type="text" placeholder="Enter username" autofocus required>
-                <label for="paswword">Password:</label>
-                <input id="paswword" type="password" placeholder="Enter password" required>
-                <button class="btn btn--primary btn--submit" type="submit">Login</button>
+                <label for="password">Password:</label>
+                <input id="password" type="password" placeholder="Enter password" required>
+                <button class="btn btn--primary btn--submit" type="button" onclick="first_page.login()">Login</button>
             </form>
         </div>
     </div>
@@ -51,16 +51,20 @@
                 <button class="btn modal__close-button" aria-hidden="true"
                     onclick="first_page.closeModal('.modal-register')">&#x2715;</button>
             </div>
-            <form class="col-flex align-center">
+            <form method="POST" class="col-flex align-center">
                 <label for="username-register">Username:</label>
-                <input id="username-register" type="text" placeholder="Enter username" autofocus required>
+                <input id="username-register" name="username" type="text" placeholder="Enter username" minlength="5" maxlength="50" autofocus required>
                 <label for="password-register">Password:</label>
-                <input id="password-register" type="password" placeholder="Enter password" required>
-                <label for="repeat-password">Repeat password:</label>
-                <input id="repeat-password" type="password" placeholder="Enter password again" required>
-                <label for="email">Email:</label>
-                <input id="email" type="email" placeholder="Enter email" required>
-                <button class="btn btn--primary btn--submit" type="submit">Register</button>
+                <input id="password-register" name="password" type="password" placeholder="Enter password" required>
+                <label for="repeat-password-register">Repeat password:</label>
+                <input id="repeat-password-register" type="password" placeholder="Enter password again" required>
+                <label for="first-name-register">First name:</label>
+                <input id="first-name-register" name="firstName" type="text" placeholder="Enter first name" minlength="5" maxlength="100" autofocus required>
+                <label for="last-name-register">Last name:</label>
+                <input id="last-name-register" name="lastName" type="text" placeholder="Enter last name" minlength="5" maxlength="100" autofocus required>
+                <label for="email-register">Email:</label>
+                <input id="email-register" name="email" type="email" placeholder="Enter email" required>
+                <button class="btn btn--primary btn--submit" type="button" onclick="first_page.register()">Register</button>
             </form>
         </div>
     </div>

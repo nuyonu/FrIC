@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>First Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Login and register page.">
+    <link rel="stylesheet" href="/public/styles/common.css">
+    <link rel="stylesheet" href="/public/styles/stats.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <script src="/public/js/stats.js" async defer></script>
+</head>
+<body>
+<h1 class="title text-align-center mb-4">My stats</h1>
+    <div class="main full-height">
+        <div class="main_token col-flex align-items-center border-y my-1">
+            <h2 class="mt-2">Token:</h2>
+            <textarea id="token" readonly>
+                TOKEN
+            </textarea>
+            <button class="btn btn--primary my-2" type="button" disabled>Generate new token (Comming soon)</button>
+        </div>
+        <div class="main_requests col-flex align-items-center border-y my-1">
+            <h2 class="mt-2">Your requests:</h2>
+            <input id="remaining-requests" class="my-1 p-2 bg-transparent fs-18px border-radius-5px" type="text">
+        </div>
+    </div>
+    <footer>
+        <!-- footer empty -->
+    </footer>
+</body>
+</html>

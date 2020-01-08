@@ -1,0 +1,27 @@
+{
+  "name": "fricserver3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/restify": "^8.4.2",
+    "automapper-ts": "^1.9.0",
+    "bcrypt": "^3.0.7",
+    "class-validator": "^0.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.2",
+    "pg": "^7.16.0",
+    "restify": "^8.5.1",
+    "restify-jwt-community": "^1.1.2",
+    "rimraf": "^3.0.0",
+    "serve-static-restify": "^3.0.0",
+    "ts-node": "^8.5.4",
+    "typeorm": "^0.3.0-rc.2",
+    "typescript": "^3.7.4"
+  }
+}
