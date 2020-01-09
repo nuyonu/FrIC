@@ -1,0 +1,34 @@
+"use strict";
+
+let test = "sdasda"; // import {Config} from './Config/ConfigFractal';
+// import {Fric} from "./lib/fric";
+//
+// var fractal1 = new Config()
+//     .SetAngle(2)
+//     .AddRule("d")
+//     .SetAngle(1)
+//     .AddRule("dasd");
+//
+//
+// var fractal2 = new Config();
+//
+// fractal2.SetAngle(2)
+//     .AddRule("d")
+//     .SetAngle(1)
+//     .AddRule("dasd")
+//     .Completed();
+//
+//
+// var fric = new Fric('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+// fric.AddFractal(fractal2);
+// fric.AddFractal(
+//     new Config()
+//         .SetAngle(2)
+//         .AddRule("d")
+//         .SetAngle(1)
+//         .AddRule("dasd"));
+//
+// fric.AddFractals([fractal1, fractal2]);
+//
+//
+// // fric.makeRequest();
