@@ -14,7 +14,7 @@ export class AuthService {
         const user = await userRepository.findOne({ where: { username: loginDTO.username}});
         if(user == undefined || !bcrypt.compareSync(loginDTO.password, user.password))
             throw new Error("Username or password invalid.");
-        const token = jwt.sign({id: user.id, username: user.username}, config.JWT.SECRET, {
+        const token = jwt.sign({id: user.id}, config.JWT.SECRET, {
                 expiresIn: '60m'
         });
         let loginResponseDTO = new LoginResponseDTO();

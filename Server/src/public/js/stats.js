@@ -1,8 +1,15 @@
 let stats = (function() {
+  const PLANS = {
+    "1" : "FREE",
+    "2" : "MEDIUM",
+    "3" : "ULTIMATE"
+  };
+
   (function initializePage() {
     if(localStorage.getItem("token") == null)
     {
       tokenNotFound();
+      logOut();
     }
     else
       setUserInformation();
@@ -19,7 +26,10 @@ let stats = (function() {
         token = element.select();
         document.execCommand("copy");
         // alert("Token copied to clipboard!");
-        
+        swal({
+          title: "Token copied to clipboard",
+          icon: "success",
+        });
         window.getSelection().removeAllRanges();
         // document.selection.empty();
     })
@@ -45,8 +55,16 @@ let stats = (function() {
     const user_email = document.getElementById("user-email");
     const token_textarea = document.getElementById("token");
     const remaining_requests = document.getElementById("remaining-requests");
+    const your_plan = document.getElementById("your-plan");
 
-    userId = parseJwt(localStorage.getItem("token")).id;
+    let userId
+    try {
+      userId = parseJwt(localStorage.getItem("token")).id;
+    }
+    catch(error) {
+      tokenNotFound();
+      logOut();
+    }
     const endPoint = "/api/users/" + userId;
 
     let xhr = new XMLHttpRequest();
@@ -69,6 +87,13 @@ let stats = (function() {
         remaining_requests.value = requests;
         const remaining_requests_font_size = parseInt(window.getComputedStyle(remaining_requests).fontSize);
         remaining_requests.style.width = (requests.length + 1) * remaining_requests_font_size/2 + "px";
+        //PLAN
+        your_plan.value = PLANS[json.plan.toString()];
+        your_plan.style.width = (PLANS[json.plan.toString()].length + 1) * 11 + "px";
+      }
+      else if (xhr.readyState == 4 && xhr.status == 404) {
+        tokenNotFound();
+        logOut();
       }
     };
     xhr.send(null);
