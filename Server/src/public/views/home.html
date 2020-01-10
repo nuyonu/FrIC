@@ -20,14 +20,19 @@
     <div class="main full-height">
         <div class="main_token col-flex align-items-center border-y my-1">
             <h2 class="my-2">Token(click to copy):</h2>
-            <textarea id="token" readonly>
+            <textarea class="mb-2" id="token" readonly>
                 TOKEN
             </textarea>
-            <button class="btn btn--primary my-2" type="button" disabled>Generate new token (Comming soon)</button>
+            <button hidden class="btn btn--primary mt-1 mb-2" type="button" disabled>Generate new token (Comming soon)</button>
         </div>
         <div class="main_requests col-flex align-items-center border-y my-1">
             <h2 class="my-2">Your requests:</h2>
             <input id="remaining-requests" class="my-1 p-2 bg-transparent fs-18px border-radius-5px" type="text">
+        </div>
+        <div class="main_plan col-flex align-items-center border-y my-1">
+            <h2 class="my-2">Your plan:</h2>
+            <input id="your-plan" class="my-1 p-2 bg-transparent fs-18px border-radius-5px" type="text">
+            <p class="color-red">You cannot upgrade right now. Coming soon</p>
         </div>
     </div>
     <footer>
