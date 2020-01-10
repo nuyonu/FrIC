@@ -5,6 +5,5 @@
 # * 'gtrp' and 'gtr' create a GET request with or without query parameters;
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
-GET https://dsqdzkf7h2.execute-api.eu-central-1.amazonaws.com/prod/fractal?rules=F%20-%3E%20FF%2B%5B%2BF-F-F%5D-%5B-F%2BF%2BF%5D&depth=3&format=png&axiom=F&angle=22.5
-
+GET https://dsqdzkf7h2.execute-api.eu-central-1.amazonaws.com/prod/fractal?axiom=F&angle=22.5&rules=F%20-%3E%20FF%2B%5B%2BF-F-F%5D-%5B-F%2BF%2BF%5D&depth=1&format=png
 ###
