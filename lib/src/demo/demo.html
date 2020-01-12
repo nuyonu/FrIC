@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./demo.css">
+</head>
+<script src="exemples.js"></script>
+
+<script src="lib.js" async defer></script>
+<script src="./demo.js" async defer></script>
+
+<body>
+<div class="m-5 template-columns">
+    <div id="container-options">
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-column justify-content-around my-2 demo-rules">
+                <div class="demo-rules-line">
+                    <label for="selected">Presets</label>
+                    <select id="selected" onchange="val()">
+                        <option value="leaf">Leaf</option>
+                        <option value="Bushes">Bushes1</option>
+                        <option value="Bushes2">Bushes2</option>
+                        <option value="Bushes3">Bushes3</option>
+                        <option value="Saupe">Saupe</option>
+                        <option value="Saupe2">Saupe2</option>
+                        <option value="sticks">sticks</option>
+                        <option value="algae">algae</option>
+                        <option value="Weed">Weed</option>
+                        <option value="Quadratic Gosper">Quadratic Gosper</option>
+                        <option value="Square Sierpinski">Square Sierpinski</option>
+                    </select>
+                </div>
+                <div class="demo-rules-line">
+                    <label for="format">Format</label>
+                    <select id="format">
+                        <option value="png">Png</option>
+                        <option value="pdf">Pdf</option>
+                        <option value="jpeg">Jpeg</option>
+                        <option value="svg">svg</option>
+                    </select>
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="axiom">Axiom:</label>
+                    <input class="input" id="axiom" type="text" placeholder="axiom">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="angle">Angle:</label>
+                    <input class="input w-80px" id="angle" type="number" placeholder="angle">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="depth">Depth:</label>
+                    <input class="input w-80px" id="depth" type="number" placeholder="depth">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="lineColor">Line color:</label>
+                    <input class="input" id="lineColor" type="color" placeholder="lineColor">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="backColor">Background color:</label>
+                    <input class="input" id="backColor" type="color" placeholder="backColor">
+                </div>
+                <div class="d-flex w-100 my-2">
+                    <label class="mr-1" for="rules">Rules:</label>
+                    <input class="input" id="rules" type="text" placeholder="rules">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="lineWidth">Line width:</label>
+                    <input class="input w-80px" id="lineWidth" type="number" placeholder="lineWidth">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="lengthFactor">Length factor:</label>
+                    <input class="input w-80px" id="lengthFactor" type="number" placeholder="lengthFactor">
+                </div>
+                <div class="demo-rules-line">
+                    <label class="mr-1" for="lineLength">Line length:</label>
+                    <input class="input w-80px" id="lineLength" type="number" placeholder="lineLength">
+                </div>
+
+            </div>
+            <div class="d-flex flex-row justify-content-around my-2">
+
+            </div>
+            <div class="demo-rules-line">
+                <label for="antialias">Antialias</label>
+                <input type="checkbox" id="antialias">
+            </div>
+        </div>
+        <div class="d-flex justify-content-center my-3" >
+            <button class="btn btn-secondary btn-lg" type="button" onclick="demo.show()">Generate</button>
+        </div>
+    </div>
+    <div class="justify-content-center  container-img" id="container-result">
+        <img id="result">
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</html>
