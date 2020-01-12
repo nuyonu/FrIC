@@ -1,5 +1,6 @@
 #login__btn-login,
-#register__btn-register {
+#register__btn-register,
+#demo__btn-demo {
   border: none;
   font-size: 100px;
   background: transparent;
@@ -13,7 +14,8 @@
 }
 
 #login__btn-login:hover,
-#register__btn-register:hover {
+#register__btn-register:hover,
+#demo__btn-demo:hover {
   color: #404040 !important;
   font-weight: 700 !important;
   letter-spacing: 3px;

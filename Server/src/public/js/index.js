@@ -11,7 +11,7 @@ let first_page = (function() {
     buttons.forEach(button => {
       if (
         (button.id != undefined) &
-        (button.id.includes("login") || button.id.includes("register"))
+        (button.id.includes("login") || button.id.includes("register") || button.id.includes("demo"))
       )
         button.style["font-size"] =
           document.body.clientWidth * (75 / 1280) + "px";
