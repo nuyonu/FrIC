@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Scholarly HTML FrIC</title>
+  <link rel="stylesheet" href="css/scholarly.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <script src="js/scholarly.min.js"></script>
+</head>
+
+<body prefix="schema: http://schema.org">
+  <header>
+    <div class="banner">
+      <img src="scholarly-html.svg" width="227" height="50" alt="Scholarly HTML logo">
+      <div class="status">FrIC</div>
+    </div>
+    <h1>Scholarly HTML FrIC</h1>
+  </header>
+  <div role="contentinfo">
+    <dl>
+      <dt>Autori</dt>
+      <dd>
+        Grigoraș Alexandru Ionel
+        &amp;
+        Paul Maxim
+        &amp;
+        Filoș Gabriel
+      </dd>
+      <dt>Github</dt>
+      <dd>
+        <a role="doc-biblioref" href="https://github.com/nuyonu/FrIC">Link Github</a>
+      </dd>
+    </dl>
+  </div>
+  <section id="introduction" role="doc-introduction">
+    <h2>Introducere</h2>
+    <p>
+      Se doreşte dezvoltarea unui cadru-suport (framework, platformă) pentru a vizualiza eficient diverse tipuri de
+      fractali -- minimal, sisteme generative precum fractalii Lindenmayer (L-systems) implicând un număr foarte mare de
+      reguli şi/sau iteraţii. Modalitatea de redare (2D şi 3D) va recurge la utilizarea uneia sau mai multor soluţii
+      aliniate problematicilor cloud computing -- a se explora resursele oferite de Awesome Cloud Native.
+    </p>
+  </section>
+  <section id="structure">
+    <h2>Arhitectura software de ansamblu</h2>
+    <section id="diagram">
+      <h3>Diagrama aplicației</h3>
+      <figure>
+        <img typeof="sa:image" src="resources/diagrama2.png" alt="Arhitectura aplicației" style="width:100%">
+        <figcaption>Fig.1 - Arhitectura aplicației</figcaption>
+      </figure>
+    </section>
+    <section id="main-module">
+      <h3>Module principale</h3>
+      <section id="client-module">
+        <h4>Modul pentru client</h4>
+        <p>
+          Clientul va putea importa js-ul nostru ce contine un modul. El va putea seta un token pe care Îl va lua de pe
+          platforma oferită de noi. Odată avut un token valid el va avea la dispoziție unele funcții pentru generarea
+          fractalului în funcție de axioma de început, regulile de calcul, adâncimea(numărul de iterații),
+          preferințe(culoare, background, dimensiunea imaginii, etc).
+        </p>
+        <p>
+          Ca funcții dacă clientul importă libraria noastră va avea:
+          <ul>
+            <li>setToken(token: string)</li>
+            <li>generate(axiom: string, rules: [string], angle: number, depth: number, timeOut: number, withImage: bool)
+            </li>
+            <li>userInfo()</li>
+            <li>Drawing.setLineColor(color: string)</li>
+            <li>Drawing.setBackgroundColor(color: string)</li>
+          </ul>
+          Clientul va avea mai multe opțiuni pentru a seta preferințele pentru imaginea cu fractalul, mai sus sunt date
+          ca exemplu doar doua din ele. <b>Drawing</b> va prezenta o clasă pe care clientul o va putea folosi pentru
+          setarea preferințelor în cazul în care dorește ca funcția <i>generate()</i> să intoarcă imaginea cu fractalul
+          său.
+        </p>
+        <p>
+          Clientul poate opta pentru a primi o poza direct din server cu fractalul său desenat sau poate opta pentru a
+          primi doar regula finală calculată sub forma unui string.
+        </p>
+      </section>
+      <section id="server-module">
+        <h4>Module cloud</h4>
+        <p>
+          În primul rând vom avea un modul pentru autentificarea/înregistrarea userilor. Acest modul va genera un token
+          unic pentru fiecare client ce dorește să folosească librăria noastră.
+        </p>
+        <p>
+          Vom avea un modul care va lucra cu baza de date. În baza de date vom avea anumite informații precum username,
+          HASH(password), token, data de înregistrarea, tipul de licență. Eventual vom
+          oferi o statistică despre request-urile rămase, în cât timp a fost calculată o regula trimisă către cloud
+          (ultimele 10 reguli sau ultima regulă).
+        </p>
+        <p>
+          Vom avea un API-Gateway ce va face legătura între client și lambda expresii. Atunci când clientul apelează
+          funcția <i>generate(...)</i>, este trimis un request GET către API-ul de la amazon cu toate caracteristicile.
+          API-Gateway-ul va trimite către o funcție lambda ce va calcula fractalul și va trimite răspunsul către client.
+          De exemplu pentru GET am putea avea:
+          <ul>
+            <li>
+              <code>...amazonaws.com/api/generate?token="..."&axiom=F&rules=F -> FF-[XY]+[XY], X -> +FY, Y -> -FX&angle=14&depth=10&timeOut=0&withImage=false</code>
+            </li>
+            <li>
+              <code>...amazonaws.com/api/generate?token="..."&axiom=F&rules=F -> FF-[XY]+[XY], X -> +FY, Y -> -FX&angle=14&depth=10&timeOut=0&withImage=true&colors=white,red&image=1000,1000</code>
+            </li>
+          </ul>
+          Dacă withImage este false atunci clientul va primi următorul răspuns:
+          <pre id="response-generate">
+            <code>
+                {
+                  status : "success",
+                  data : {
+                      "payload" : {
+                          "result" : "FF-[XY]+[XY]FF-[XY]+[XY]-[+FY-FX]+[+FY-FX]",
+                          "elapsed" : 3,
+                          "length" : 42,
+                          "depth" : 2,
+                          "imageLink" : null
+                      }
+                  }
+              }
+            </code>
+          </pre>
+          Clientul mai poate apela și <i>userInfo()</i>. Când acesta apelează această funcție se va trimite un request
+          de forma: <code>...amazonaws.com/api/userinfo?token="..."</code>. Răspunsul va fi de forma:
+          <pre id="generate-response">
+            <code>
+              {
+                status : "success",
+                data : {
+                    "payload" : {
+                        "username" : "Alexandrovici",
+                        "email" : "Alexandrovici@gmail.com",
+                        "token" : "3e2ba35fc7d90caa67a54ee43ba5b352",
+                        "plan" : 2
+                        "registrationDate" : "2019-10-21T13:28:06.419Z"
+                    }
+                }
+            }
+          </code></pre>
+        </p>
+        <p>
+          Mai multe exemple de respons-uri se pot găsi la link-ul: <a href="https://pastebin.com/1vx6kdvN">Click
+            aici</a>.
+        </p>
+        <section id="lambda-functions">
+          <h5>Funcții lambda</h5>
+          <p>
+            O funcție lambda importantă este cea pentru calculul fractalului, această funcție va primi ca parametrii
+            (axioma, regulile de calcul, unghiul, adâncimea(numărul de iterații). Această funcție va returna un răspuns
+            ca cel de <a href="index.html#generate-response">aici</a>.
+          </p>
+          <p>
+            O altă funcție lambda este cea pentru a vedea informațiile despre utilizator. Această funcție va returna un
+            răspuns ca cel de <a href="index.html#userinfo-response">aici</a>.
+          </p>
+        </section>
+      </section>
+      <section id="token-server">
+        <h4>Despre server</h4>
+        <p>
+          Pentru a putea oferi funcționalitate completă utilizatorilor, am ales să avem un server ce va avea rolul de a
+          oferi un token celor care doresc să utilizeze framework-ul nostru. Serverul oferă posibilitatea unui user de a
+          se înregistra, loga și în același timp furnizează o pagină pentru demo. În demo ne folosim de libraria oferită
+          clientului, astfel acesta are și un exemplu.
+        </p>
+        <p>
+          Serveru a fost gândit și implementat cât mai modular. Pentru a putea oferi un API, ne-am folosit de
+          <b>restify</b>, astfel noi expunem un api ce îl apelăm din browserul clientului folosind javascript.
+        </p>
+        <p>
+          Ca structura, serverul are următoarele
+          <ul>
+            <li>config: <b>Folder</b> = Aici sunt stocate configurațiile noastre, constante etc</li>
+            <li>controllers: <b>Folder</b> = Acest folder conține toate controllere ce fac legătura între servicii și
+              exterior</li>
+            <li>database: <b>Folder</b> = Folderul în care sunt stocate clasele/clasa ce se ocupă de baza de date</li>
+            <li>migration: <b>Folder</b> = În acest folder sunt stocate migrările generate de ORM-ul ce se ocupă de baza
+              de date.</li>
+            <li>models: <b>Folder</b> = Aici se află entitățile pentru baza de date. De exemplu clasa User.</li>
+            <li>public: <b>Folder</b> = Acest folder conține toate resursele publice expuse spre exterior (views,
+              javascript, styles)</li>
+            <li>server: <b>Folder</b> = Folderul în care este stocată clasa ce se ocupă de server, ce ne expune metoda
+              start pentru a putea porni serverul.</li>
+            <li>services: <b>Folder</b> = În acest folder sunt stocate toate serviciile. Acestea fac legătura între baza
+              de date și controllere.</li>
+            <li>viewModels: <b>Folder</b> = Folderul ce ține toate clasele de transfer către exterior. (DTO-urile)</li>
+            <li>index.ts = Acesta reprezintă punctul nostru de start al serverului. O dată rulat, el apelează metoda
+              start pentru API + setează o configurare pentru baza de date.</li>
+          </ul>
+        </p>
+      </section>
+    </section>
+  </section>
+  <section id="etape-principale">
+    <h2>Etapele principale ale proiectului</h2>
+    <p>Deoarece vom folosi foarte des ideea de server și cea de API-Gateway pentru a explica cum va funcționa librăria
+      și platforma, vom stabili de la început că API-Gateway-ul face legătura dintre client și lambda expresii, iar
+      serverul este cel care se ocupă de platforma oferită clienților (site-ul unde se loghează/înregistrează, generează
+      token-ul și pot
+      vedea anumite statistici). Serverul va fi și el hostat în Amazon. </p>
+    <p>
+      O primă etapă a reprezentat proietarea arhitecturii. Aici am stabilit la ce va avea clientul acces, ce va putea
+      face serverul și de ce funcții lambda vom avea nevoie pentru partea de cloud.
+    </p>
+    <p>
+      O a doua etapă a reprezentat implementarea api-gateway-ului și a funcțiilor lambda ce le vom apela din funcțiile
+      expuse către clientul
+      nostru. Am pornit cu ideea de a avea două funcții lambda, dar în final am rămas cu una singură ce se ocupă atât de
+      calcularea fractalului, cât și de generarea imaginii în urma regulii. Am ales să facem acest lucru deoarece am
+      folosit Amazon Free, iar acesta ne lasă doar un număr limitat de apeluri către API-Gateway, lambda-funcții.
+    </p>
+    <p>
+      O a treia etapă a reprezentat implementarea serverului ce are mai multe roluri. Un prim rol ar fi acela de a
+      oferi suport pentru înregistre și autentificare pe site-ul framework-ului. Clientul trebuie să se înregistreze
+      pentru a putea folosi framework-ul deoarece noi identificăm un utilizator printr-un token unic. Tokenul este
+      generat
+      după ce clientul își creează contul. Alt rol al serverului este acela de a oferi clientului o pagina de demo, în
+      care poate vedea cum funcționează framework-ul nostru.
+    </p>
+    <p>
+      Ultima etapă a fost implementarea librăriei pentru client. Avem un modul prin care îi oferim posibilitatea
+      de a accesa serviciile noastre. Prin intermediul unui token el va putea face cereri către server și dacă token-ul
+      este valid
+      va primi rezultatul, în caz contrar va primi un link către site și i se va afișa sub forma unei erori.
+    </p>
+  </section>
+  <section id="maniera-de-interactiune">
+    <h2>Maniera de interacţiune cu utilizatorul</h2>
+    <section id="maniera-de-interactiune-cu-libraria">
+      <h3>Maniera de interacțiune a utilizatorului cu librăria.</h3>
+      <p>
+        Pentru ca un utilizator să poată folosi funcțiile disponibile pe partea de client(când importează libăria
+        noastră), el va trebuii să se
+        înregistreze pe site-ul oferit de către noi și să își genereze un token. Tokenul îl va putea folosi la
+        cu ajutorul funcției <i>setToken(token)</i>. <br>
+        Clientul poate cere prin intermediul librăriei folosind funcția <i>generate(...)</i> regula finală după ce
+        fractalul a fost calculat sau poate cere ca răspunsul să includă și un url cu imaginea rezultată. Dacă tokenul
+        nu este bun atunci generate va returna un rezultat cu status de eroare. Dacă anumiti parametrii din generate nu
+        sunt valizi atunci clientul va primi un rezultat cu status de eșec. Rezultatul bun va fi returnat doar dacă toți
+        parametrii sunt buni și tokenul este valid.
+        Dacă clientul dorește să schimbe anumite proprietăți ale imaginii va avea expusa o clasă cu diferiți parametrii.
+        Clasa <b>Drawing</b> îi va fi de folos dacă dorește să schimbe culoarea liniilor, culoare fundalului,
+        dimensiunea imaginii și altele.
+      </p>
+    </section>
+    <section id="maniera-de-interactiune-cu-siteul">
+      <h3>Maniera de interacțiune a utilizatorului cu platforma</h3>
+      <p>
+        Clientul are la dispoziție o platformă unde poate să se înregistreze și să se autentifice, sau poate vedea un demo. <br>
+        Odată autentificat, el poate vedea următoarele statistici:
+        <ul>
+          <li>Token-ul aferent</li>
+          <li>câte apeluri mai poate face cu ajutorul funcției generate()</li>
+          <li>planul actual</li>
+        </ul>
+      </p>
+    </section>
+    <p>
+      Nu am reușit să implementăm posibilitatea de upgrade al planului, astfel clientul are doar planul:
+      <ul>
+        <li>Free - Utilizatorul are voie doar la câteva cereri (10)</li>
+      </ul>
+    </p>
+  </section>
+  <section id="management-code">
+    <h2>Modul de folosire a sistemului de management al codului-sursă</h2>
+    <section id="github1">
+      <h3>Cum folosim github?</h3>
+      <p>GitHub este un serviciu de hosting al proiectelor git (un proiect git este numit repository). Acesta permite
+        păstrarea unei copii a proiectului online și vizualizarea tuturor fișierelor și a modificărilor aduse
+        acestora.<br>
+
+        Utilizăm GitHub pentru a stoca codul în diverse versiuni, versiuni care sunt cât mai stabile. Vom avea versiuni
+        de la codul HTML/CSS/JAVASCRIPT până la versiuni ce conțin inclusiv funcționalitate pentru server,
+        funcționalitate
+        ce va fi realizată cu ajutorul limbajului de programare TYPESCRIPT. O versiune pentru noi va reprezenta un
+        stagiu in care se afla proiectul.</p>
+    </section>
+    <section id="github2">
+      <h3>Cât de folositor este github?</h3>
+      <p>
+        Pe o scară de la unu la zece, GitHub ar primi nota zece. Este foarte folositor în proiectul nostru deoarece
+        acesta oferă multe avantaje precum:
+        <ul>
+          <li>este salvat istoricul tuturor modificărilor, astfel că se poate reveni oricând la o versiune mai veche
+            dacă se descoperă introducerea unor defecte în ultima versiune</li>
+          <li>prin folosirea unui serviciu de hosting, codul sursă are mereu o copie de siguranță online</li>
+          <li>cea mai recentă versiune a codului sursă este mereu disponibilă tuturor dezvoltatorilor, făcând astfel
+            colaborarea și sincronizarea mult mai ușoară decât în cazul trimiterii de fișiere conținând cod sursă
+            dezvoltatorilor interesați de proiect.</li>
+        </ul>
+      </p>
+    </section>
+  </section>
+  <section id="modelarea-datelor">
+    <h2>Modelarea datelor / Soluţiile de stocare</h2>
+    <p>
+      Pentru a stoca datele pe partea de server am folosit baza de date <b>PostgresSQL</b>. Pentru a interacționa cu baza de date folosim un ORM (Object Relational Mapping). Acesta ne-a ajutat deoarece folosim clase pentru entități.
+    </p>
+    <section>
+      <h3>Diagrama baza de date server</h3>
+      <figure>
+        <img typeof="sa:image" src="resources/Diagrama baza de date.png" alt="Diagrama baza de date" style="height: 400px;">
+        <figcaption>Fig.2 - Diagrama bază de date server.</figcaption>
+      </figure>
+    </section>
+    </section>
+</body>
+
+</html>
