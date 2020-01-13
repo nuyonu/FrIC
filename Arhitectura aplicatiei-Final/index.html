@@ -63,18 +63,24 @@
           preferințe(culoare, background, dimensiunea imaginii, etc).
         </p>
         <p>
-          Ca funcții dacă clientul importă libraria noastră va avea:
+          Ca funcții dacă clientul importă libraria noastră va avea următoarele functii de baza:
           <ul>
-            <li>setToken(token: string)</li>
-            <li>generate(axiom: string, rules: [string], angle: number, depth: number, timeOut: number, withImage: bool)
-            </li>
-            <li>userInfo()</li>
-            <li>Drawing.setLineColor(color: string)</li>
-            <li>Drawing.setBackgroundColor(color: string)</li>
+            <li>Fric(token: string) -  gestioneaza fractali si face apelurile </li>
+            <ul>
+            	<li>AddFractal(fractal : Fractal)</li>
+            	<li>makeRequest()</li>
+            	<li>GetResult(index)</li>
+            </ul>
+            <li>Fractal(data: vector json) seteaza configuratia pentru fractal daca paseaza configuratia la initializare</li>
+            <ul>
+            	<li>SetFormat(format :string)</li>
+            	<li>SetDepth(depth : number)</li>
+            </ul>
+            <li>Result - se ocupa cu gestionarea fractalilor generatii</li>
           </ul>
           Clientul va avea mai multe opțiuni pentru a seta preferințele pentru imaginea cu fractalul, mai sus sunt date
-          ca exemplu doar doua din ele. <b>Drawing</b> va prezenta o clasă pe care clientul o va putea folosi pentru
-          setarea preferințelor în cazul în care dorește ca funcția <i>generate()</i> să intoarcă imaginea cu fractalul
+          ca exemplu doar doua din ele. <b>Fractal</b> va prezenta o clasă pe care clientul o va putea folosi pentru
+          setarea preferințelor în cazul în care dorește ca funcția <i>makeRequest()</i> să intoarcă imaginea cu fractalul
           său.
         </p>
         <p>
